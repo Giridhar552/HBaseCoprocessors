@@ -349,27 +349,37 @@ public final class GetRegionServerLSNProtos {
   public interface GetRegionServerLSNReponseOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // repeated .GetRegionServerLSNReponse.Result result = 1;
+    // optional bool isNew = 1;
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>optional bool isNew = 1;</code>
      */
-    java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result>
+    boolean hasIsNew();
+    /**
+     * <code>optional bool isNew = 1;</code>
+     */
+    boolean getIsNew();
+
+    // repeated .GetRegionServerLSNReponse.Result result = 2;
+    /**
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
+     */
+    java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> 
         getResultList();
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result getResult(int index);
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     int getResultCount();
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
-    java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder>
+    java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder> 
         getResultOrBuilderList();
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder getResultOrBuilder(
         int index);
@@ -425,10 +435,15 @@ public final class GetRegionServerLSNProtos {
               }
               break;
             }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+            case 8: {
+              bitField0_ |= 0x00000001;
+              isNew_ = input.readBool();
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 result_ = new java.util.ArrayList<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result>();
-                mutable_bitField0_ |= 0x00000001;
+                mutable_bitField0_ |= 0x00000002;
               }
               result_.add(input.readMessage(org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.PARSER, extensionRegistry));
               break;
@@ -441,7 +456,7 @@ public final class GetRegionServerLSNProtos {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           result_ = java.util.Collections.unmodifiableList(result_);
         }
         this.unknownFields = unknownFields.build();
@@ -502,6 +517,16 @@ public final class GetRegionServerLSNProtos {
        */
       com.google.protobuf.ByteString
           getRegionNameBytes();
+
+      // optional bool valid = 3;
+      /**
+       * <code>optional bool valid = 3;</code>
+       */
+      boolean hasValid();
+      /**
+       * <code>optional bool valid = 3;</code>
+       */
+      boolean getValid();
     }
     /**
      * Protobuf type {@code GetRegionServerLSNReponse.Result}
@@ -562,6 +587,11 @@ public final class GetRegionServerLSNProtos {
               case 18: {
                 bitField0_ |= 0x00000002;
                 regionName_ = input.readBytes();
+                break;
+              }
+              case 24: {
+                bitField0_ |= 0x00000004;
+                valid_ = input.readBool();
                 break;
               }
             }
@@ -637,7 +667,7 @@ public final class GetRegionServerLSNProtos {
         if (ref instanceof java.lang.String) {
           return (java.lang.String) ref;
         } else {
-          com.google.protobuf.ByteString bs =
+          com.google.protobuf.ByteString bs = 
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
@@ -653,7 +683,7 @@ public final class GetRegionServerLSNProtos {
           getRegionNameBytes() {
         java.lang.Object ref = regionName_;
         if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           regionName_ = b;
@@ -663,9 +693,26 @@ public final class GetRegionServerLSNProtos {
         }
       }
 
+      // optional bool valid = 3;
+      public static final int VALID_FIELD_NUMBER = 3;
+      private boolean valid_;
+      /**
+       * <code>optional bool valid = 3;</code>
+       */
+      public boolean hasValid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional bool valid = 3;</code>
+       */
+      public boolean getValid() {
+        return valid_;
+      }
+
       private void initFields() {
         lsn_ = 0L;
         regionName_ = "";
+        valid_ = false;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -685,6 +732,9 @@ public final class GetRegionServerLSNProtos {
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           output.writeBytes(2, getRegionNameBytes());
         }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          output.writeBool(3, valid_);
+        }
         getUnknownFields().writeTo(output);
       }
 
@@ -701,6 +751,10 @@ public final class GetRegionServerLSNProtos {
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
             .computeBytesSize(2, getRegionNameBytes());
+        }
+        if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBoolSize(3, valid_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -735,6 +789,11 @@ public final class GetRegionServerLSNProtos {
           result = result && getRegionName()
               .equals(other.getRegionName());
         }
+        result = result && (hasValid() == other.hasValid());
+        if (hasValid()) {
+          result = result && (getValid()
+              == other.getValid());
+        }
         result = result &&
             getUnknownFields().equals(other.getUnknownFields());
         return result;
@@ -755,6 +814,10 @@ public final class GetRegionServerLSNProtos {
         if (hasRegionName()) {
           hash = (37 * hash) + REGIONNAME_FIELD_NUMBER;
           hash = (53 * hash) + getRegionName().hashCode();
+        }
+        if (hasValid()) {
+          hash = (37 * hash) + VALID_FIELD_NUMBER;
+          hash = (53 * hash) + hashBoolean(getValid());
         }
         hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
@@ -869,6 +932,8 @@ public final class GetRegionServerLSNProtos {
           bitField0_ = (bitField0_ & ~0x00000001);
           regionName_ = "";
           bitField0_ = (bitField0_ & ~0x00000002);
+          valid_ = false;
+          bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
 
@@ -905,6 +970,10 @@ public final class GetRegionServerLSNProtos {
             to_bitField0_ |= 0x00000002;
           }
           result.regionName_ = regionName_;
+          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+            to_bitField0_ |= 0x00000004;
+          }
+          result.valid_ = valid_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -928,6 +997,9 @@ public final class GetRegionServerLSNProtos {
             bitField0_ |= 0x00000002;
             regionName_ = other.regionName_;
             onChanged();
+          }
+          if (other.hasValid()) {
+            setValid(other.getValid());
           }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
@@ -1018,7 +1090,7 @@ public final class GetRegionServerLSNProtos {
             getRegionNameBytes() {
           java.lang.Object ref = regionName_;
           if (ref instanceof String) {
-            com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString b = 
                 com.google.protobuf.ByteString.copyFromUtf8(
                     (java.lang.String) ref);
             regionName_ = b;
@@ -1063,6 +1135,39 @@ public final class GetRegionServerLSNProtos {
           return this;
         }
 
+        // optional bool valid = 3;
+        private boolean valid_ ;
+        /**
+         * <code>optional bool valid = 3;</code>
+         */
+        public boolean hasValid() {
+          return ((bitField0_ & 0x00000004) == 0x00000004);
+        }
+        /**
+         * <code>optional bool valid = 3;</code>
+         */
+        public boolean getValid() {
+          return valid_;
+        }
+        /**
+         * <code>optional bool valid = 3;</code>
+         */
+        public Builder setValid(boolean value) {
+          bitField0_ |= 0x00000004;
+          valid_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>optional bool valid = 3;</code>
+         */
+        public Builder clearValid() {
+          bitField0_ = (bitField0_ & ~0x00000004);
+          valid_ = false;
+          onChanged();
+          return this;
+        }
+
         // @@protoc_insertion_point(builder_scope:GetRegionServerLSNReponse.Result)
       }
 
@@ -1074,36 +1179,53 @@ public final class GetRegionServerLSNProtos {
       // @@protoc_insertion_point(class_scope:GetRegionServerLSNReponse.Result)
     }
 
-    // repeated .GetRegionServerLSNReponse.Result result = 1;
-    public static final int RESULT_FIELD_NUMBER = 1;
+    private int bitField0_;
+    // optional bool isNew = 1;
+    public static final int ISNEW_FIELD_NUMBER = 1;
+    private boolean isNew_;
+    /**
+     * <code>optional bool isNew = 1;</code>
+     */
+    public boolean hasIsNew() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional bool isNew = 1;</code>
+     */
+    public boolean getIsNew() {
+      return isNew_;
+    }
+
+    // repeated .GetRegionServerLSNReponse.Result result = 2;
+    public static final int RESULT_FIELD_NUMBER = 2;
     private java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> result_;
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     public java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> getResultList() {
       return result_;
     }
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
-    public java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder>
+    public java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder> 
         getResultOrBuilderList() {
       return result_;
     }
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     public int getResultCount() {
       return result_.size();
     }
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result getResult(int index) {
       return result_.get(index);
     }
     /**
-     * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+     * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
      */
     public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder getResultOrBuilder(
         int index) {
@@ -1111,6 +1233,7 @@ public final class GetRegionServerLSNProtos {
     }
 
     private void initFields() {
+      isNew_ = false;
       result_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -1125,8 +1248,11 @@ public final class GetRegionServerLSNProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBool(1, isNew_);
+      }
       for (int i = 0; i < result_.size(); i++) {
-        output.writeMessage(1, result_.get(i));
+        output.writeMessage(2, result_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1137,9 +1263,13 @@ public final class GetRegionServerLSNProtos {
       if (size != -1) return size;
 
       size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, isNew_);
+      }
       for (int i = 0; i < result_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, result_.get(i));
+          .computeMessageSize(2, result_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1164,6 +1294,11 @@ public final class GetRegionServerLSNProtos {
       org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse other = (org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse) obj;
 
       boolean result = true;
+      result = result && (hasIsNew() == other.hasIsNew());
+      if (hasIsNew()) {
+        result = result && (getIsNew()
+            == other.getIsNew());
+      }
       result = result && getResultList()
           .equals(other.getResultList());
       result = result &&
@@ -1179,6 +1314,10 @@ public final class GetRegionServerLSNProtos {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasIsNew()) {
+        hash = (37 * hash) + ISNEW_FIELD_NUMBER;
+        hash = (53 * hash) + hashBoolean(getIsNew());
+      }
       if (getResultCount() > 0) {
         hash = (37 * hash) + RESULT_FIELD_NUMBER;
         hash = (53 * hash) + getResultList().hashCode();
@@ -1293,9 +1432,11 @@ public final class GetRegionServerLSNProtos {
 
       public Builder clear() {
         super.clear();
+        isNew_ = false;
+        bitField0_ = (bitField0_ & ~0x00000001);
         if (resultBuilder_ == null) {
           result_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           resultBuilder_.clear();
         }
@@ -1326,15 +1467,21 @@ public final class GetRegionServerLSNProtos {
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse buildPartial() {
         org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse result = new org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse(this);
         int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.isNew_ = isNew_;
         if (resultBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
             result_ = java.util.Collections.unmodifiableList(result_);
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.result_ = result_;
         } else {
           result.result_ = resultBuilder_.build();
         }
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1350,11 +1497,14 @@ public final class GetRegionServerLSNProtos {
 
       public Builder mergeFrom(org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse other) {
         if (other == org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.getDefaultInstance()) return this;
+        if (other.hasIsNew()) {
+          setIsNew(other.getIsNew());
+        }
         if (resultBuilder_ == null) {
           if (!other.result_.isEmpty()) {
             if (result_.isEmpty()) {
               result_ = other.result_;
-              bitField0_ = (bitField0_ & ~0x00000001);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensureResultIsMutable();
               result_.addAll(other.result_);
@@ -1367,8 +1517,8 @@ public final class GetRegionServerLSNProtos {
               resultBuilder_.dispose();
               resultBuilder_ = null;
               result_ = other.result_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              resultBuilder_ =
+              bitField0_ = (bitField0_ & ~0x00000002);
+              resultBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getResultFieldBuilder() : null;
             } else {
@@ -1403,13 +1553,46 @@ public final class GetRegionServerLSNProtos {
       }
       private int bitField0_;
 
-      // repeated .GetRegionServerLSNReponse.Result result = 1;
+      // optional bool isNew = 1;
+      private boolean isNew_ ;
+      /**
+       * <code>optional bool isNew = 1;</code>
+       */
+      public boolean hasIsNew() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional bool isNew = 1;</code>
+       */
+      public boolean getIsNew() {
+        return isNew_;
+      }
+      /**
+       * <code>optional bool isNew = 1;</code>
+       */
+      public Builder setIsNew(boolean value) {
+        bitField0_ |= 0x00000001;
+        isNew_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool isNew = 1;</code>
+       */
+      public Builder clearIsNew() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        isNew_ = false;
+        onChanged();
+        return this;
+      }
+
+      // repeated .GetRegionServerLSNReponse.Result result = 2;
       private java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> result_ =
         java.util.Collections.emptyList();
       private void ensureResultIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           result_ = new java.util.ArrayList<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result>(result_);
-          bitField0_ |= 0x00000001;
+          bitField0_ |= 0x00000002;
          }
       }
 
@@ -1417,7 +1600,7 @@ public final class GetRegionServerLSNProtos {
           org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder> resultBuilder_;
 
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> getResultList() {
         if (resultBuilder_ == null) {
@@ -1427,7 +1610,7 @@ public final class GetRegionServerLSNProtos {
         }
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public int getResultCount() {
         if (resultBuilder_ == null) {
@@ -1437,7 +1620,7 @@ public final class GetRegionServerLSNProtos {
         }
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result getResult(int index) {
         if (resultBuilder_ == null) {
@@ -1447,7 +1630,7 @@ public final class GetRegionServerLSNProtos {
         }
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder setResult(
           int index, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result value) {
@@ -1464,7 +1647,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder setResult(
           int index, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder builderForValue) {
@@ -1478,7 +1661,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder addResult(org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result value) {
         if (resultBuilder_ == null) {
@@ -1494,7 +1677,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder addResult(
           int index, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result value) {
@@ -1511,7 +1694,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder addResult(
           org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder builderForValue) {
@@ -1525,7 +1708,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder addResult(
           int index, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder builderForValue) {
@@ -1539,7 +1722,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder addAllResult(
           java.lang.Iterable<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result> values) {
@@ -1553,12 +1736,12 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder clearResult() {
         if (resultBuilder_ == null) {
           result_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           resultBuilder_.clear();
@@ -1566,7 +1749,7 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public Builder removeResult(int index) {
         if (resultBuilder_ == null) {
@@ -1579,14 +1762,14 @@ public final class GetRegionServerLSNProtos {
         return this;
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder getResultBuilder(
           int index) {
         return getResultFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder getResultOrBuilder(
           int index) {
@@ -1596,9 +1779,9 @@ public final class GetRegionServerLSNProtos {
         }
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
-      public java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder>
+      public java.util.List<? extends org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder> 
            getResultOrBuilderList() {
         if (resultBuilder_ != null) {
           return resultBuilder_.getMessageOrBuilderList();
@@ -1607,14 +1790,14 @@ public final class GetRegionServerLSNProtos {
         }
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder addResultBuilder() {
         return getResultFieldBuilder().addBuilder(
             org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.getDefaultInstance());
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder addResultBuilder(
           int index) {
@@ -1622,20 +1805,20 @@ public final class GetRegionServerLSNProtos {
             index, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.getDefaultInstance());
       }
       /**
-       * <code>repeated .GetRegionServerLSNReponse.Result result = 1;</code>
+       * <code>repeated .GetRegionServerLSNReponse.Result result = 2;</code>
        */
-      public java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder>
+      public java.util.List<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder> 
            getResultBuilderList() {
         return getResultFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder>
+          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder> 
           getResultFieldBuilder() {
         if (resultBuilder_ == null) {
           resultBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.Result.Builder, org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.ResultOrBuilder>(
                   result_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
           result_ = null;
@@ -1654,6 +1837,440 @@ public final class GetRegionServerLSNProtos {
     // @@protoc_insertion_point(class_scope:GetRegionServerLSNReponse)
   }
 
+  public interface TestResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional uint64 count = 1;
+    /**
+     * <code>optional uint64 count = 1;</code>
+     */
+    boolean hasCount();
+    /**
+     * <code>optional uint64 count = 1;</code>
+     */
+    long getCount();
+  }
+  /**
+   * Protobuf type {@code TestResponse}
+   */
+  public static final class TestResponse extends
+      com.google.protobuf.GeneratedMessage
+      implements TestResponseOrBuilder {
+    // Use TestResponse.newBuilder() to construct.
+    private TestResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private TestResponse(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final TestResponse defaultInstance;
+    public static TestResponse getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public TestResponse getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private TestResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              count_ = input.readUInt64();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return org.splicemachine.capstone.GetRegionServerLSNProtos.internal_static_TestResponse_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return org.splicemachine.capstone.GetRegionServerLSNProtos.internal_static_TestResponse_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.class, org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<TestResponse> PARSER =
+        new com.google.protobuf.AbstractParser<TestResponse>() {
+      public TestResponse parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TestResponse(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<TestResponse> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional uint64 count = 1;
+    public static final int COUNT_FIELD_NUMBER = 1;
+    private long count_;
+    /**
+     * <code>optional uint64 count = 1;</code>
+     */
+    public boolean hasCount() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional uint64 count = 1;</code>
+     */
+    public long getCount() {
+      return count_;
+    }
+
+    private void initFields() {
+      count_ = 0L;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeUInt64(1, count_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(1, count_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse)) {
+        return super.equals(obj);
+      }
+      org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse other = (org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse) obj;
+
+      boolean result = true;
+      result = result && (hasCount() == other.hasCount());
+      if (hasCount()) {
+        result = result && (getCount()
+            == other.getCount());
+      }
+      result = result &&
+          getUnknownFields().equals(other.getUnknownFields());
+      return result;
+    }
+
+    private int memoizedHashCode = 0;
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasCount()) {
+        hash = (37 * hash) + COUNT_FIELD_NUMBER;
+        hash = (53 * hash) + hashLong(getCount());
+      }
+      hash = (29 * hash) + getUnknownFields().hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code TestResponse}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return org.splicemachine.capstone.GetRegionServerLSNProtos.internal_static_TestResponse_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return org.splicemachine.capstone.GetRegionServerLSNProtos.internal_static_TestResponse_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.class, org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.Builder.class);
+      }
+
+      // Construct using org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        count_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return org.splicemachine.capstone.GetRegionServerLSNProtos.internal_static_TestResponse_descriptor;
+      }
+
+      public org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse getDefaultInstanceForType() {
+        return org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance();
+      }
+
+      public org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse build() {
+        org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse buildPartial() {
+        org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse result = new org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.count_ = count_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse) {
+          return mergeFrom((org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse other) {
+        if (other == org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance()) return this;
+        if (other.hasCount()) {
+          setCount(other.getCount());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional uint64 count = 1;
+      private long count_ ;
+      /**
+       * <code>optional uint64 count = 1;</code>
+       */
+      public boolean hasCount() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional uint64 count = 1;</code>
+       */
+      public long getCount() {
+        return count_;
+      }
+      /**
+       * <code>optional uint64 count = 1;</code>
+       */
+      public Builder setCount(long value) {
+        bitField0_ |= 0x00000001;
+        count_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 count = 1;</code>
+       */
+      public Builder clearCount() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        count_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:TestResponse)
+    }
+
+    static {
+      defaultInstance = new TestResponse(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:TestResponse)
+  }
+
   /**
    * Protobuf service {@code GetRegionServerLSNService}
    */
@@ -1670,6 +2287,14 @@ public final class GetRegionServerLSNProtos {
           org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
           com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse> done);
 
+      /**
+       * <code>rpc testCall(.GetRegionServerLSNRequest) returns (.TestResponse);</code>
+       */
+      public abstract void testCall(
+          com.google.protobuf.RpcController controller,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
+          com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse> done);
+
     }
 
     public static com.google.protobuf.Service newReflectiveService(
@@ -1681,6 +2306,14 @@ public final class GetRegionServerLSNProtos {
             org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
             com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse> done) {
           impl.getRegionServerLSN(controller, request, done);
+        }
+
+        @java.lang.Override
+        public  void testCall(
+            com.google.protobuf.RpcController controller,
+            org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
+            com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse> done) {
+          impl.testCall(controller, request, done);
         }
 
       };
@@ -1707,6 +2340,8 @@ public final class GetRegionServerLSNProtos {
           switch(method.getIndex()) {
             case 0:
               return impl.getRegionServerLSN(controller, (org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest)request);
+            case 1:
+              return impl.testCall(controller, (org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest)request);
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -1722,6 +2357,8 @@ public final class GetRegionServerLSNProtos {
           }
           switch(method.getIndex()) {
             case 0:
+              return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest.getDefaultInstance();
+            case 1:
               return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
@@ -1739,6 +2376,8 @@ public final class GetRegionServerLSNProtos {
           switch(method.getIndex()) {
             case 0:
               return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.getDefaultInstance();
+            case 1:
+              return org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance();
             default:
               throw new java.lang.AssertionError("Can't get here.");
           }
@@ -1754,6 +2393,14 @@ public final class GetRegionServerLSNProtos {
         com.google.protobuf.RpcController controller,
         org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
         com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse> done);
+
+    /**
+     * <code>rpc testCall(.GetRegionServerLSNRequest) returns (.TestResponse);</code>
+     */
+    public abstract void testCall(
+        com.google.protobuf.RpcController controller,
+        org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
+        com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse> done);
 
     public static final
         com.google.protobuf.Descriptors.ServiceDescriptor
@@ -1782,6 +2429,11 @@ public final class GetRegionServerLSNProtos {
             com.google.protobuf.RpcUtil.<org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse>specializeCallback(
               done));
           return;
+        case 1:
+          this.testCall(controller, (org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest)request,
+            com.google.protobuf.RpcUtil.<org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse>specializeCallback(
+              done));
+          return;
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -1797,6 +2449,8 @@ public final class GetRegionServerLSNProtos {
       }
       switch(method.getIndex()) {
         case 0:
+          return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest.getDefaultInstance();
+        case 1:
           return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
@@ -1814,6 +2468,8 @@ public final class GetRegionServerLSNProtos {
       switch(method.getIndex()) {
         case 0:
           return org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.getDefaultInstance();
+        case 1:
+          return org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance();
         default:
           throw new java.lang.AssertionError("Can't get here.");
       }
@@ -1849,6 +2505,21 @@ public final class GetRegionServerLSNProtos {
             org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.class,
             org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.getDefaultInstance()));
       }
+
+      public  void testCall(
+          com.google.protobuf.RpcController controller,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request,
+          com.google.protobuf.RpcCallback<org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse> done) {
+        channel.callMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance(),
+          com.google.protobuf.RpcUtil.generalizeCallback(
+            done,
+            org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.class,
+            org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance()));
+      }
     }
 
     public static BlockingInterface newBlockingStub(
@@ -1858,6 +2529,11 @@ public final class GetRegionServerLSNProtos {
 
     public interface BlockingInterface {
       public org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse getRegionServerLSN(
+          com.google.protobuf.RpcController controller,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request)
+          throws com.google.protobuf.ServiceException;
+
+      public org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse testCall(
           com.google.protobuf.RpcController controller,
           org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request)
           throws com.google.protobuf.ServiceException;
@@ -1881,6 +2557,18 @@ public final class GetRegionServerLSNProtos {
           org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNReponse.getDefaultInstance());
       }
 
+
+      public org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse testCall(
+          com.google.protobuf.RpcController controller,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.GetRegionServerLSNRequest request)
+          throws com.google.protobuf.ServiceException {
+        return (org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse) channel.callBlockingMethod(
+          getDescriptor().getMethods().get(1),
+          controller,
+          request,
+          org.splicemachine.capstone.GetRegionServerLSNProtos.TestResponse.getDefaultInstance());
+      }
+
     }
 
     // @@protoc_insertion_point(class_scope:GetRegionServerLSNService)
@@ -1901,6 +2589,11 @@ public final class GetRegionServerLSNProtos {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_GetRegionServerLSNReponse_Result_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_TestResponse_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TestResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1911,14 +2604,17 @@ public final class GetRegionServerLSNProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\030GetRegionServerLSN.proto\"\033\n\031GetRegionS" +
-      "erverLSNRequest\"y\n\031GetRegionServerLSNRep" +
-      "onse\0221\n\006result\030\001 \003(\0132!.GetRegionServerLS" +
-      "NReponse.Result\032)\n\006Result\022\013\n\003lsn\030\001 \001(\004\022\022" +
-      "\n\nregionName\030\002 \001(\t2i\n\031GetRegionServerLSN" +
-      "Service\022L\n\022getRegionServerLSN\022\032.GetRegio" +
-      "nServerLSNRequest\032\032.GetRegionServerLSNRe" +
-      "ponseB>\n\032org.splicemachine.capstoneB\030Get" +
-      "RegionServerLSNProtosH\001\210\001\001\240\001\001"
+      "erverLSNRequest\"\227\001\n\031GetRegionServerLSNRe" +
+      "ponse\022\r\n\005isNew\030\001 \001(\010\0221\n\006result\030\002 \003(\0132!.G" +
+      "etRegionServerLSNReponse.Result\0328\n\006Resul" +
+      "t\022\013\n\003lsn\030\001 \001(\004\022\022\n\nregionName\030\002 \001(\t\022\r\n\005va" +
+      "lid\030\003 \001(\010\"\035\n\014TestResponse\022\r\n\005count\030\001 \001(\004" +
+      "2\240\001\n\031GetRegionServerLSNService\022L\n\022getReg" +
+      "ionServerLSN\022\032.GetRegionServerLSNRequest" +
+      "\032\032.GetRegionServerLSNReponse\0225\n\010testCall" +
+      "\022\032.GetRegionServerLSNRequest\032\r.TestRespo",
+      "nseB>\n\032org.splicemachine.capstoneB\030GetRe" +
+      "gionServerLSNProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1936,13 +2632,19 @@ public final class GetRegionServerLSNProtos {
           internal_static_GetRegionServerLSNReponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_GetRegionServerLSNReponse_descriptor,
-              new java.lang.String[] { "Result", });
+              new java.lang.String[] { "IsNew", "Result", });
           internal_static_GetRegionServerLSNReponse_Result_descriptor =
             internal_static_GetRegionServerLSNReponse_descriptor.getNestedTypes().get(0);
           internal_static_GetRegionServerLSNReponse_Result_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_GetRegionServerLSNReponse_Result_descriptor,
-              new java.lang.String[] { "Lsn", "RegionName", });
+              new java.lang.String[] { "Lsn", "RegionName", "Valid", });
+          internal_static_TestResponse_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_TestResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_TestResponse_descriptor,
+              new java.lang.String[] { "Count", });
           return null;
         }
       };

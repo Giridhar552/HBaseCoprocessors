@@ -10,16 +10,24 @@ message GetRegionServerLSNRequest {
 }
 
 message GetRegionServerLSNReponse {
+  optional bool isNew  = 1;
   message Result {
     optional uint64 lsn = 1;
     optional string regionName = 2;
+    optional bool valid = 3;
   }
-  repeated Result result = 1;
+  repeated Result result = 2;
+}
+
+message TestResponse {
+  optional uint64 count = 1;
 }
 
 service GetRegionServerLSNService {
   rpc getRegionServerLSN(GetRegionServerLSNRequest)
     returns (GetRegionServerLSNReponse);
+  rpc testCall(GetRegionServerLSNRequest)
+    returns (TestResponse);
 }
 
 /* A sample for nested Reponse
@@ -32,3 +40,4 @@ service GetRegionServerLSNService {
  * repeated Result result = 1;
  *}
  */
+
