@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.coprocessor.SingletonCoprocessorService;
 import org.apache.hadoop.hbase.ipc.CoprocessorRpcChannel;
 import org.splicemachine.capstone.GetRegionServerLSNProtos;
 import org.splicemachine.capstone.coprocessor.GetRegionServerLSNEndpoint;
@@ -38,6 +39,10 @@ public class EndpointClient {
             connection = ConnectionFactory.createConnection(configuration);
             Admin myAdmin = connection.getAdmin();
             Collection<ServerName> rsNames = myAdmin.getClusterStatus().getServers();
+            boolean res = SingletonCoprocessorService.class.isAssignableFrom(GetRegionServerLSNEndpoint.class);
+            if(!res){
+                //
+            }
             for(ServerName rsName: rsNames){
                 // Call to the RPC
                 CoprocessorRpcChannel channel = myAdmin.coprocessorService(rsName);
