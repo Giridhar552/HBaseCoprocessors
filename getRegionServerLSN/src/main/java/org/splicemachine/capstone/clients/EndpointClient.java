@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.splicemachine.capstone.GetRegionServerLSNProtos;
 import org.splicemachine.capstone.coprocessor.GetRegionServerLSNEndpoint;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,63 +27,19 @@ public class EndpointClient {
     final static byte[] tsCol = Bytes.toBytes("ts");
     // only using one row for masterLSNTS table
     final static byte[] theRow = Bytes.toBytes("theRow");
+    static String outputFile = "/home/centos/EndpointOutput";
 
-    public static void main(String[] args) throws  IOException{
-        // here we are using a pseudo timestamp
-        Long pseudoTs = 0l;
+    public static void main(String[] args) throws  Exception{
         String slaveMasterAddr;
         if(args.length != 1){
-            System.out.println("DID NOT PROVIDE SLAVE HMASTER'S ADDRESS");
-            exit(1);
+            System.out.println("DID NOT PROVIDE SLAVE HMASTER'S ADDRESS RUNNING WITHOUT UPDATING SLAVE'S masterLSNTS TABLE");
+            startCollection(false, null, false);
         }
-        slaveMasterAddr = args[0];
-
-        // create connection to the Master cluster's HBase
-        Configuration localConfig = HBaseConfiguration.create();
-
-        // create connection to the Slave cluster's HBase
-        Configuration slaveConfig = HBaseConfiguration.create();
-        slaveConfig.set("hbase.zookeeper.quorum", slaveMasterAddr);
-        slaveConfig.set("hbase.master", slaveMasterAddr + ":60000");
-        System.out.println("Slave and Master coinfigurations are created");
-
-        Connection localConn = ConnectionFactory.createConnection(localConfig);
-        Connection slaveConn = ConnectionFactory.createConnection(slaveConfig);
-        System.out.println("Slave and Master connections are created");
-
-        createMasterLSNTSTable(slaveConn);
-
-        HashMap<String, Long> result = null;
-
-        long total_time = 0;
-        try {
-            while (true) {
-                long startTime = System.nanoTime();
-                result = getLSN(localConn);
-                updateSlaveTable(slaveConn, result, pseudoTs);
-                long endTime = System.nanoTime();
-                total_time += (endTime - startTime);
-//                System.out.printf("retrieve %d regions in %d nano sec\n", result.size(), endTime - startTime);
-                System.out.println(result.size());
-                pseudoTs++;
-            }
-        }
-        catch(Exception e){
-            System.out.println(e.toString());
-        }
-        finally{
-            // close connection upon failure
-            if(localConn != null){
-                localConn.close();
-            }
-            if(slaveConn != null){
-                slaveConn.close();
-            }
-            System.out.printf("average time %d", total_time/100);
-            return;
+        else {
+            slaveMasterAddr = args[0];
+            startCollection(true, slaveMasterAddr, false);
         }
     }
-
 
     /*
      * update the masterLSNTS table at the slave cluster's HBase
@@ -118,12 +75,8 @@ public class EndpointClient {
     static HashMap<String, Long> getLSN(Connection connection) throws Exception {
         HashMap<String, Long> rsLSNMap = new HashMap<>();
             Admin myAdmin = connection.getAdmin();
-//            System.out.println("Admin has been made");
             ClusterStatus status = myAdmin.getClusterStatus();
-//            System.out.println("status has been got");
             Collection<ServerName> rsNames = status.getServers();
-//            System.out.println("Got server names");
-//            System.out.println(rsNames.toString());
             for (ServerName rsName : rsNames) {
                 // Call to the RPC
                 CoprocessorRpcChannel channel = myAdmin.coprocessorService(rsName);
@@ -155,4 +108,81 @@ public class EndpointClient {
         admin.close();
     }
 
+    public static void startCollection(boolean updateMasterLSNTS, String slaveMasterAddr, boolean takeLog) throws Exception{
+        Connection slaveConn = null;
+        Connection localConn = null;
+        Configuration slaveConfig = HBaseConfiguration.create();
+        Configuration localConfig = HBaseConfiguration.create();
+        if(!updateMasterLSNTS){
+            System.out.println("DID NOT PROVIDE SLAVE HMASTER'S ADDRESS RUNNING WITHOUT UPDATING SLAVE'S masterLSNTS TABLE");
+        }
+        else {
+            // create connection to the Slave cluster's HBase
+            slaveConfig.set("hbase.zookeeper.quorum", slaveMasterAddr);
+            slaveConfig.set("hbase.master", slaveMasterAddr + ":60000");
+            slaveConn = ConnectionFactory.createConnection(slaveConfig);
+            createMasterLSNTSTable(slaveConn);
+        }
+
+        // create connection to the Master cluster's HBase
+        localConn = ConnectionFactory.createConnection(localConfig);
+        HashMap<String, Long> result = null;
+
+        // here we are using a pseudo timestamp
+        Long pseudoTs = 0l;
+        long totalTime = 0;
+        long updateTaleTotalTime = 0;
+        int counter = 0;
+        long startTime = 0;
+        long endTime = 0;
+        long updateTableStartTime = 0;
+        try {
+            while (true) {
+                // Printout the result after running 10000 rounds.
+                if(takeLog && counter % 10000 == 0 && result != null){
+                    long avgRetrieveUpdateTime = totalTime / 10000;
+                    myPrint(String.format("retrieve %d regions and updateTable in %d nano sec for 10000 rounds\n", result.size(), avgRetrieveUpdateTime),
+                            takeLog);
+                    long avgUpdateTime = updateTaleTotalTime / 10000;
+                    myPrint(String.format("updateTable in %d nano sec for 10000 rounds\n", avgUpdateTime),
+                            takeLog);
+                }
+
+                startTime = System.nanoTime();
+                result = getLSN(localConn);
+                if(updateMasterLSNTS) {
+                    updateTableStartTime = System.nanoTime();
+                    updateSlaveTable(slaveConn, result, pseudoTs);
+                }
+                endTime = System.nanoTime();
+                if(updateMasterLSNTS){
+                    updateTaleTotalTime += (endTime - updateTableStartTime);
+                }
+
+                totalTime += (endTime - startTime);
+                counter++;
+                pseudoTs++;
+            }
+        }
+        catch(Exception e){
+
+            System.out.println(e.toString());
+        }
+        finally{
+            // close connection upon failure
+            if(localConn != null){
+                localConn.close();
+            }
+            if(slaveConn != null){
+                slaveConn.close();
+            }
+            return;
+        }
+    }
+
+    static void myPrint(String str,boolean output){
+        if(output){
+            System.out.println(str);
+        }
+    }
 }

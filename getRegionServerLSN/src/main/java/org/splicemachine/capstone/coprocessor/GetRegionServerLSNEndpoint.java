@@ -43,13 +43,13 @@ public class GetRegionServerLSNEndpoint extends GetRegionServerLSNProtos.GetRegi
 
     @Override
     public void stop(CoprocessorEnvironment env) throws IOException {
-        LOG.info("start is called and get executed");
+//        LOG.info("start is called and get executed");
         // nothing to do when coprocessor is shutting down
     }
 
     @Override
     public Service getService() {
-        LOG.info("start is called and get executed");
+//        LOG.info("start is called and get executed");
         return this;
     }
 
@@ -59,7 +59,7 @@ public class GetRegionServerLSNEndpoint extends GetRegionServerLSNProtos.GetRegi
                                    RpcCallback<GetRegionServerLSNProtos.GetRegionServerLSNReponse> done) {
         // synchronized the call
         synchronized (this) {
-            LOG.info("=====================getRegionServerLSN=====================");
+//            LOG.info("=====================getRegionServerLSN=====================");
             // Create builder
             GetRegionServerLSNProtos.GetRegionServerLSNReponse.Builder responseBuilder =
                     GetRegionServerLSNProtos.GetRegionServerLSNReponse.newBuilder();
@@ -79,10 +79,10 @@ public class GetRegionServerLSNEndpoint extends GetRegionServerLSNProtos.GetRegi
                         // What should be the key value
                         WAL wal = regionServerServices.getWAL(region.getRegionInfo());
                         long earliestMemstoreNum = wal.getEarliestMemstoreSeqNum(region.getRegionInfo().getEncodedNameAsBytes());
-                        String debugStr = String.format("checking %s with ReadPoint %d, maxFlusedSeqId %d, memStoreSeq %d",
-                                region.getRegionInfo().getEncodedName(),region.getReadpoint(IsolationLevel.READ_COMMITTED),
-                                region.getMaxFlushedSeqId(), earliestMemstoreNum);
-                        LOG.info(debugStr);
+//                        String debugStr = String.format("checking %s with ReadPoint %d, maxFlusedSeqId %d, memStoreSeq %d",
+//                                region.getRegionInfo().getEncodedName(),region.getReadpoint(IsolationLevel.READ_COMMITTED),
+//                                region.getMaxFlushedSeqId(), earliestMemstoreNum);
+//                        LOG.info(debugStr);
                         long readPoint = region.getReadpoint(IsolationLevel.READ_COMMITTED);
                         String encodedRegionName = region.getRegionInfo().getEncodedName();
                         responseBuilder.addResult(
