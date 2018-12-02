@@ -14,7 +14,6 @@ public class CollectionBenchMark {
     final static byte[] testTableCF = Bytes.toBytes("CF1");
 
     public static void main(String args[]) throws Exception{
-        InputStreamReader cin = null;
         if(args.length != 1){
             throw new Exception("Missing argmument sepcifying the number of table to create");
         }
@@ -25,19 +24,7 @@ public class CollectionBenchMark {
         conn.close();
         System.out.println("Table setup has finished");
 
-        try{
-            cin = new InputStreamReader(System.in);
-            System.out.println("Enter q to quit. Enter other key to continue");
-            char c;
-            c = (char) cin.read();
-            if(c == 'q'){
-                System.exit(0);
-            }
-        }finally{
-            if(cin != null){
-                cin.close();
-            }
-        }
+        waitForInput();
 
         EndpointClient.startCollection(false, null, true);
 
@@ -55,5 +42,23 @@ public class CollectionBenchMark {
             }
         }
         admin.close();
+    }
+
+    static void waitForInput() throws Exception
+    {
+        InputStreamReader cin = null;
+        try{
+            cin = new InputStreamReader(System.in);
+            System.out.println("Enter q to quit. Enter other key to continue");
+            char c;
+            c = (char) cin.read();
+            if(c == 'q'){
+                System.exit(0);
+            }
+        }finally{
+            if(cin != null){
+                cin.close();
+            }
+        }
     }
 }

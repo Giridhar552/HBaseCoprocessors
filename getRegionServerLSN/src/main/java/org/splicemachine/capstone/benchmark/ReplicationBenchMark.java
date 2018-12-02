@@ -13,6 +13,9 @@ import org.splicemachine.capstone.clients.EndpointClient;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class ReplicationBenchMark {
     static final String JDBC_DRIVER = "com.splicemachine.db.jdbc.ClientDriver";
@@ -21,15 +24,31 @@ public class ReplicationBenchMark {
     static final String USER = "splice";
     static final String PASS = "admin";
     static final String TABLE_PREFIX = "TEST_";
+    static final String INSTRUCTION = "dbAddr(one of the datanode in the Master cluster)" +
+            "NumberOfTableToInsert slaveAddr insertNum";
 
     public static void main(String args[]) throws Exception
     {
-        if(args.length != 3){
-            throw new Exception(String.format("Expected 2 arguments but get %d", args.length));
+        if(args.length != 4){
+            System.out.println(String.format("Expected 4 arguments but get %d", args.length));
+            System.out.println(INSTRUCTION);
+            return;
         }
-        String dbAddr = args[0];
-        int tableNum = Integer.parseInt(args[1]);
-        String slaveAddr = args[2];
+        String dbAddr, slaveAddr;
+        int tableNum, insertNum;
+
+        try{
+            dbAddr = args[0];
+            tableNum = Integer.parseInt(args[1]);
+            slaveAddr = args[2];
+            insertNum = Integer.parseInt(args[3]);
+        }
+        catch(Exception e){
+            System.out.println(INSTRUCTION);
+            throw new Exception("Failed to parse input arguments");
+        }
+
+
         Configuration conf = HBaseConfiguration.create();
         org.apache.hadoop.hbase.client.Connection hbaseConn =
                 ConnectionFactory.createConnection(conf);
@@ -38,15 +57,42 @@ public class ReplicationBenchMark {
         for(HTableDescriptor des : descriptors){
             tableNames.add(des.getNameAsString());
         }
+        System.out.println("Continue to create table through spliceMachine");
+        CollectionBenchMark.waitForInput();
         createTableTrhoughSplice(dbAddr, tableNum);
         List<HTableDescriptor> newDescriptors = getNewlyCreatedTableDescriptors(hbaseConn, tableNames);
+
+        System.out.println("Continue to create the same table at the slave cluster");
+        CollectionBenchMark.waitForInput();
         createTableAtSlaveCluster(newDescriptors, slaveAddr);
         enableRep(hbaseConn,newDescriptors);
         hbaseConn.close();
 
         // result queue for recording completion time
-        Queue<Long> queue = new ConcurrentLinkedQueue<Long>();
+        Queue<Long> completionTimes = new ConcurrentLinkedQueue<Long>();
         // start multiple threads for insertion.
+
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(tableNum);
+
+        System.out.println("Continue to insert table");
+        CollectionBenchMark.waitForInput();
+        for(int i = 0; i < tableNum; ++i){
+            InsertionTask task = new InsertionTask(dbAddr, TABLE_PREFIX + Integer.toString(i), completionTimes, insertNum);
+            executor.execute(task);
+        }
+        executor.shutdown();
+        while(!executor.isTerminated()){
+            Thread.sleep(100);
+        }
+
+        // out print the total and average time spent doing insertion
+        long totalTime = 0l;
+        for(long timeSpent: completionTimes){
+            totalTime += timeSpent;
+        }
+        long avgTime = totalTime/tableNum;
+        System.out.println(String.format("spent %d in total\n %d thread each inserts %d rows to %d table\n avg time %d",
+                totalTime, tableNum, insertNum, tableNum, avgTime));
         return;
     }
 
@@ -198,6 +244,6 @@ public class ReplicationBenchMark {
                 slaveHbaseConn.close();
             }
         }
-
     }
+
 }
