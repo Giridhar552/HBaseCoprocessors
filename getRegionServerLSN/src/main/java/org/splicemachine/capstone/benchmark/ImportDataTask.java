@@ -1,41 +1,42 @@
 package org.splicemachine.capstone.benchmark;
-import java.sql.*;
-import java.util.*;
-public class InsertionTask implements Runnable{
-    private String tableName;
-    private String url;
-    private int insertNum;
-    private Queue<Long> resQueue;
 
-    public InsertionTask(String dbAddr,String tableName, Queue<Long> resQueue, int insertNum)
-    {
+import org.apache.hadoop.hdfs.server.datanode.Replica;
+
+import java.sql.CallableStatement;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.Queue;
+
+public class ImportDataTask implements Runnable{
+    private String url;
+    private String tableName;
+    private Queue<Long> resQueue;
+    private static String IMPORT_QUERY =
+            "call SYSCS_UTIL.IMPORT_DATA "+
+            "('splice', '%s', null, '/lineitem', ',', null, null, null, null, 0, '/badfiles', true, null)";
+
+    public ImportDataTask(String dbAddr, String tableName, Queue<Long> resQueue) {
+        this.url = String.format(ReplicationBenchMark.DB_URL, dbAddr);
         this.tableName = tableName;
-        this.url = String.format(ReplicationBenchMark.DB_URL,dbAddr);
         this.resQueue = resQueue;
-        this.insertNum = insertNum;
     }
 
     @Override
     public void run()
     {
         java.sql.Connection conn = null;
+        String importQuery = String.format(IMPORT_QUERY,  this.tableName);
         try {
             conn = DriverManager.getConnection(this.url,
                     ReplicationBenchMark.USER,
                     ReplicationBenchMark.PASS);
-            conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement("insert into " + tableName +
-                    " values(?,?,?,?,?,?,?,?,?,?)");
+            CallableStatement cStmt = conn.prepareCall(importQuery);
             long startTime = System.nanoTime();
-            for(int i = 1; i <= 10; ++i){
-                pstmt.setInt(i, i);
-            }
-            for(int colVal = 0; colVal < this.insertNum; ++colVal){
-                pstmt.execute();
-            }
-            conn.commit();
+            cStmt.executeQuery();
             long endTime = System.nanoTime();
             this.resQueue.add((endTime - startTime));
+            conn.close();
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -65,7 +65,7 @@ public class GetRegionServerLSNEndpoint extends GetRegionServerLSNProtos.GetRegi
                     GetRegionServerLSNProtos.GetRegionServerLSNReponse.newBuilder();
             // Get Online Regions
             try {
-                Set<Region> regionSet = new HashSet<>();
+                Set<Region> regionSet = new HashSet<Region>();
                 // Get all the online tables in this RS
                 Set<TableName> tableSet = this.regionServerServices.getOnlineTables();
                 for (TableName tableName : tableSet) {
@@ -79,10 +79,6 @@ public class GetRegionServerLSNEndpoint extends GetRegionServerLSNProtos.GetRegi
                         // What should be the key value
                         WAL wal = regionServerServices.getWAL(region.getRegionInfo());
                         long earliestMemstoreNum = wal.getEarliestMemstoreSeqNum(region.getRegionInfo().getEncodedNameAsBytes());
-//                        String debugStr = String.format("checking %s with ReadPoint %d, maxFlusedSeqId %d, memStoreSeq %d",
-//                                region.getRegionInfo().getEncodedName(),region.getReadpoint(IsolationLevel.READ_COMMITTED),
-//                                region.getMaxFlushedSeqId(), earliestMemstoreNum);
-//                        LOG.info(debugStr);
                         long readPoint = region.getReadpoint(IsolationLevel.READ_COMMITTED);
                         String encodedRegionName = region.getRegionInfo().getEncodedName();
                         responseBuilder.addResult(

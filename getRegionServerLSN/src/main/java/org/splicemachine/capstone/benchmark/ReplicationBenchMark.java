@@ -1,19 +1,14 @@
 package org.splicemachine.capstone.benchmark;
 
 import java.sql.*;
-import java.lang.reflect.*;
 import java.util.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.client.replication.ReplicationAdmin;
-import org.apache.hadoop.hbase.util.Bytes;
-import org.splicemachine.capstone.clients.EndpointClient;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -26,6 +21,7 @@ public class ReplicationBenchMark {
     static final String TABLE_PREFIX = "TEST_";
     static final String INSTRUCTION = "dbAddr(one of the datanode in the Master cluster)" +
             "NumberOfTableToInsert slaveAddr insertNum";
+    static final String FAM_NAME = "V";
 
     public static void main(String args[]) throws Exception
     {
@@ -48,6 +44,12 @@ public class ReplicationBenchMark {
             throw new Exception("Failed to parse input arguments");
         }
 
+        try{
+            Class.forName("com.splicemachine.db.jdbc.ClientDriver");
+        } catch(ClassNotFoundException cne){
+            cne.printStackTrace();
+            return; //exit early if we can't find the driver
+        }
 
         Configuration conf = HBaseConfiguration.create();
         org.apache.hadoop.hbase.client.Connection hbaseConn =
@@ -58,24 +60,25 @@ public class ReplicationBenchMark {
             tableNames.add(des.getNameAsString());
         }
         System.out.println("Continue to create table through spliceMachine");
-        CollectionBenchMark.waitForInput();
-        createTableTrhoughSplice(dbAddr, tableNum);
+//        System.in.read();
+        createTableThroughSplice(dbAddr, tableNum);
         List<HTableDescriptor> newDescriptors = getNewlyCreatedTableDescriptors(hbaseConn, tableNames);
 
         System.out.println("Continue to create the same table at the slave cluster");
-        CollectionBenchMark.waitForInput();
+//        System.in.read();
         createTableAtSlaveCluster(newDescriptors, slaveAddr);
+
         enableRep(hbaseConn,newDescriptors);
         hbaseConn.close();
 
         // result queue for recording completion time
         Queue<Long> completionTimes = new ConcurrentLinkedQueue<Long>();
-        // start multiple threads for insertion.
 
+        // start multiple threads for insertion.
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(tableNum);
 
         System.out.println("Continue to insert table");
-        CollectionBenchMark.waitForInput();
+//        System.in.read();
         for(int i = 0; i < tableNum; ++i){
             InsertionTask task = new InsertionTask(dbAddr, TABLE_PREFIX + Integer.toString(i), completionTimes, insertNum);
             executor.execute(task);
@@ -113,9 +116,10 @@ public class ReplicationBenchMark {
      * yet.
      * The table has ten columns, each of them is an Integer
      */
-    public static void createTableTrhoughSplice(String dbAddr, int tableNum) throws Exception
+    public static void createTableThroughSplice(String dbAddr, int tableNum) throws Exception
     {
         java.sql.Connection conn = null;
+        int partitionNum = 4;
         String url = String.format(DB_URL, dbAddr);
         String tableName;
         try{
@@ -127,10 +131,12 @@ public class ReplicationBenchMark {
                 tableName = TABLE_PREFIX + Integer.toString(i);
                 // check if table already exists or not
                 ResultSet tables = meta.getTables(null,null, tableName, null);
-                if(!tables.next()){
-                    stmt.executeUpdate("create table "  + tableName +
-                            "(COL1 int, COL2 int, COL3 int, COL5 int, COL6 int, COL7 int, COL8 int, COL9 int, COL10 int)");
+                if(tables.next()){
+                    stmt.executeUpdate("drop table "+tableName);
                 }
+                stmt.executeUpdate("create table "  + tableName +
+                        "(COL1 int, COL2 int, COL3 int, COL4 int, COL5 int, COL6 int, COL7 int, COL8 int, COL9 int, COL10 int)");
+                System.out.println("created " + tableName);
             }
         }
         catch(Exception e){
@@ -170,12 +176,16 @@ public class ReplicationBenchMark {
             replicationAdmin = new ReplicationAdmin(hbaseConn.getConfiguration());
             for(HTableDescriptor descriptor: descriptors){
                 TableName tableName = descriptor.getTableName();
+                System.out.println(String.format("enabling replication for %s",tableName.getNameAsString()));
+
+                // for each column in the table set its replication_scope to true;
                 if(admin.tableExists(tableName)){
-                    if(admin.isTableEnabled(tableName)){
-                        admin.disableTable(tableName);
+                    HTableDescriptor tableDescriptor = admin.getTableDescriptor(tableName);
+                    HColumnDescriptor[] columnDescriptors = tableDescriptor.getColumnFamilies();
+                    for(HColumnDescriptor columnDescriptor: columnDescriptors){
+                        columnDescriptor.setScope(HConstants.REPLICATION_SCOPE_GLOBAL);
+                        admin.modifyColumn(tableName, columnDescriptor);
                     }
-                    replicationAdmin.enableTableRep(tableName);
-                    admin.enableTable(tableName);
                 }
                 else{
                     throw new Exception(String.format("Cannot find table %s which should have been created",
@@ -217,15 +227,20 @@ public class ReplicationBenchMark {
             if(delim < 0){
                 throw new Exception("The table to be created at SlaveCluster's Hbase does not have a namespace!");
             }
-            String namespace = sampleName.substring(delim + 1);
+            String namespace = sampleName.substring(0, delim);
             if(!namespace.equals(SPLICE_NAMESPACE)){
                 throw new Exception(String.format("Expected namespace %s but found %s", SPLICE_NAMESPACE, namespace));
             }
 
             // Check whether the namespace already created at the slave cluster or not. If not create a new one
-            NamespaceDescriptor ns =
-                    admin.getNamespaceDescriptor(SPLICE_NAMESPACE);
-            if(ns == null){
+            NamespaceDescriptor[] allNameSpaces = admin.listNamespaceDescriptors();
+            boolean nsExists = false;
+            for(NamespaceDescriptor ns : allNameSpaces){
+                if(ns.getName().equals(SPLICE_NAMESPACE)){
+                    nsExists = true;
+                }
+            }
+            if(!nsExists){
                 admin.createNamespace(NamespaceDescriptor.create(SPLICE_NAMESPACE).build());
             }
 
